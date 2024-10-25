@@ -14,6 +14,8 @@ scrapy crawl [程序名] -o [csv 或 json 文件]
 房源面积 vs 房源单价
 ![房源面积vs房源单价](image/image-1.png)
 
+##
+
 聚类分析结果
 ![聚类分析结果](image/image-2.png)
 ![alt text](image/image-3.png)
