@@ -1,0 +1,8 @@
+1. .get() with .extract()
+2. param "meta="
+3. output cleaned item
+4. yield with print
+5. pipeline
+6. response with requests
+7. crawl with dynamic
+8. send msg to parse from db

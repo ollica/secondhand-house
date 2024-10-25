@@ -1,0 +1,135 @@
+#predict.py:
+
+
+# Selecting features and target variable
+X = data[['unit_price', 'area']]  # Features
+y = data['total_price']  # Target variable
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Choose a machine learning model and train it
+model = RandomForestRegressor()
+model.fit(X_train, y_train)
+
+# Evaluate the model
+y_pred = model.predict(X_test)
+mse = mean_squared_error(y_test, y_pred)
+print(f'Mean Squared Error: {mse}')
+
+# Make predictions on new data
+new_data = {
+    'unit_price': [10000, 20000],
+    'area': [80, 120]
+}
+new_df = pd.DataFrame(new_data)
+predictions = model.predict(new_df)
+print('Predictions for new data:')
+for i, pred in enumerate(predictions):
+    print(f'Data Point {i+1}: Predicted Total Price = {pred}')
+    
+    
+
+########################################################
+# Evaluate the model using Mean Squared Error
+mse = mean_squared_error(y_test, y_pred)
+print("Mean Squared Error:", mse)
+# Sort the values for plotting
+sorted_indices = y_test.argsort()
+y_test_sorted = y_test[sorted_indices]
+y_pred_sorted = y_pred[sorted_indices]
+
+# Visualize the actual vs. predicted values
+plt.figure(figsize=(10, 6))
+plt.scatter(y_test_sorted, y_pred_sorted, color='blue')
+plt.plot([y_test_sorted.min(), y_test_sorted.max()], [y_test_sorted.min(), y_test_sorted.max()], linestyle='--', color='red')
+plt.xlabel('Actual Total Price')
+plt.ylabel('Predicted Total Price')
+plt.title('Actual vs. Predicted Total Price')
+plt.show()
+
+#########################################################################
+
+
+
+# Get the list of location columns (assuming they are one-hot encoded)
+location_columns = data.columns[data.columns.str.startswith('location_')]
+
+# Iterate over each location column
+for location_col in location_columns:
+    location_name = location_col.split('_')[-1]  # Extract the location name from the column name
+    
+    # Filter the data for the current location
+    location_data = data[data[location_col] == 1]
+    
+    # Extract the features and target variable for the current location
+    X_location = location_data[['area'] + list(location_data.columns[location_data.columns.str.startswith('location_')])]
+    y_location = location_data['total_price']
+    
+    # Make predictions for the current location
+    y_pred_location = model.predict(X_location)
+    
+    # Visualize the area vs. predicted total price for the current location
+    plt.figure(figsize=(10, 6))
+    plt.scatter(location_data['area'], y_pred_location, color='blue', label='Predicted Total Price')
+    plt.plot([location_data['area'].min(), location_data['area'].max()], [location_data['area'].min(),location_data['area'].max()], linestyle='--', color='red')
+    plt.xlabel('Area')
+    plt.ylabel('Predicted Total Price')
+    plt.title(f'Area vs. Predicted Total Price in {location_name}')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    
+    # Save the plot for the current location in a specific directory
+    plt.savefig(f'./lianjia_secondhand/pic_of_pred/{location_name}_predict.png')
+    
+###########################################
+
+# Iterate over each location column
+for location_col in location_columns:
+    location_name = location_col.split('_')[-1]  # Extract the location name from the column name
+    
+    # Filter the data for the current location
+    location_data = data[data[location_col] == 1]
+    
+    # Extract the features and target variable for the current location
+    X_location = location_data[['area'] + list(location_data.columns[location_data.columns.str.startswith('location_')])]
+    y_location = location_data['total_price']
+    
+    # Make predictions for the current location
+    y_pred_location = model.predict(X_location)
+    
+    # Sort the data by area for better visualization
+    sorted_indices = np.argsort(location_data['area'])
+    area_sorted = location_data['area'].values[sorted_indices]
+    y_pred_sorted = y_pred_location[sorted_indices]
+    
+    # Visualize the area vs. predicted total price for the current location using a line graph
+    plt.figure(figsize=(10, 6))
+    plt.plot(area_sorted, y_pred_sorted, color='blue', label='Predicted Total Price')
+    plt.xlabel('Area')
+    plt.ylabel('Predicted Total Price')
+    plt.title(f'Area vs. Predicted Total Price in {location_name}')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+    
+    # Save the plot for the current location in a specific directory
+    plt.savefig(f'./lianjia_secondhand/pic_of_pred/{location_name}_predict.png')
+        
+        
+    
+    
+
+    
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                

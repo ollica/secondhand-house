@@ -1,0 +1,2 @@
+scrapy crawl lianjia -o lianjia_data.csv
+scrapy crawl lianjia -o output.json
